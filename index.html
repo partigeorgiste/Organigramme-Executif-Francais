@@ -476,12 +476,12 @@
             leftCol.innerHTML = '';
             
             const presidentBox = createEntityBox(orgData.president, 'president', true);
-presidentBox.onclick = () => resetOrganisation();
-leftCol.appendChild(presidentBox);
+            presidentBox.onclick = () => resetOrganisation();
+            leftCol.appendChild(presidentBox);
             
             const pmBox = createEntityBox(orgData.pm, 'pm', true);
-pmBox.onclick = () => resetOrganisation();
-leftCol.appendChild(pmBox);
+            pmBox.onclick = () => resetOrganisation();
+            leftCol.appendChild(pmBox);
             
             orgData.ministeres.forEach((ministre, index) => {
                 const ministreBox = createEntityBox(ministre, 'ministre', true, index);
@@ -542,7 +542,9 @@ leftCol.appendChild(pmBox);
             renderMiddleColumn(index);
             clearRightColumn();
 
-            function resetOrganisation() {
+        }
+
+        function resetOrganisation() {
     activeMinistere = null;
     activeDirection = null;
 
@@ -558,8 +560,6 @@ leftCol.appendChild(pmBox);
     // Vider la colonne de droite
     clearRightColumn();
 }
-
-        }
 
         function renderMiddleColumn(ministereIndex) {
             const middleCol = document.getElementById('middle-column');
