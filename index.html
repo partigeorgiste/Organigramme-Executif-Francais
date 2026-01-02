@@ -614,6 +614,19 @@
             rightCol.innerHTML = '<div class="empty-state">← Cliquez sur une direction pour voir ses services</div>';
         }
 
+        function resetOrganisation() {
+            activeMinistere = null;
+            activeDirection = null;
+
+    // Désactiver tous les ministères
+            document.querySelectorAll('.entity-box.ministre').forEach(box => box.classList.remove('active'));
+
+    // Remettre les colonnes à l'état initial
+            document.getElementById('middle-column').innerHTML = '<div class="empty-state">← Cliquez sur un ministère pour voir ses directions</div>';
+            document.getElementById('right-column').innerHTML = '<div class="empty-state">← Cliquez sur une direction pour voir ses services</div>';
+        }
+
+
         function showModal(entity) {
             const modal = document.getElementById('modal');
             const body = document.getElementById('modal-body');
