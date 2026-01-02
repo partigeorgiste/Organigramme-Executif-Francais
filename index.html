@@ -581,30 +581,7 @@
                 dirBox.onclick = () => selectDirection(index);
                 middleCol.appendChild(dirBox);
             });
-
-            
-            setTimeout(() => {
-                const ministreBoxes = document.querySelectorAll('.entity-box.ministre');
-                let offsetTop = 0;
-                
-                const presidentBox = document.querySelector('.entity-box.president');
-                const pmBox = document.querySelector('.entity-box.pm');
-                if (presidentBox) offsetTop += presidentBox.offsetHeight + 15;
-                if (pmBox) offsetTop += pmBox.offsetHeight + 15;
-                
-                for (let i = 0; i < ministereIndex; i++) {
-                    if (ministreBoxes[i]) {
-                        offsetTop += ministreBoxes[i].offsetHeight + 15;
-                    }
-                }
-                
-                const spacer = document.createElement('div');
-                spacer.style.height = `${offsetTop}px`;
-                spacer.id = 'middle-spacer';
-                middleCol.insertBefore(spacer, middleCol.firstChild);
-            }, 0);
-        }
-
+           
         function selectDirection(index) {
             activeDirection = index;
             
@@ -643,32 +620,6 @@
                 });
             }
             
-            setTimeout(() => {
-                let offsetTop = 0;
-                
-                const middleSpacer = document.getElementById('middle-spacer');
-                if (middleSpacer) {
-                    offsetTop = parseInt(middleSpacer.style.height) || 0;
-                }
-                
-                const middleTitle = document.querySelector('#middle-column .column-title');
-                if (middleTitle) {
-                    offsetTop += middleTitle.offsetHeight + 15;
-                }
-                
-                const directionBoxes = document.querySelectorAll('.entity-box.direction');
-                for (let i = 0; i < directionIndex; i++) {
-                    if (directionBoxes[i]) {
-                        offsetTop += directionBoxes[i].offsetHeight + 15;
-                    }
-                }
-                
-                const rightSpacer = document.createElement('div');
-                rightSpacer.style.height = `${offsetTop}px`;
-                rightCol.insertBefore(rightSpacer, rightCol.firstChild);
-            }, 0);
-        }
-
         function clearRightColumn() {
             const rightCol = document.getElementById('right-column');
             rightCol.innerHTML = '<div class="empty-state">← Cliquez sur une direction pour voir ses services</div>';
