@@ -564,45 +564,23 @@
     clearRightColumn();
 }
 
-function renderMiddleColumn(ministereIndex) {
-    const middleCol = document.getElementById('middle-column');
-    middleCol.innerHTML = '';
-
-    if (activeMinistere === null) return;
-
-    // --- calcul de l'offset AVANT affichage ---
-    let offsetTop = 0;
-
-    const presidentBox = document.querySelector('.entity-box.president');
-    const pmBox = document.querySelector('.entity-box.pm');
-    const ministreBoxes = document.querySelectorAll('.entity-box.ministre');
-
-    if (presidentBox) offsetTop += presidentBox.offsetHeight + 15;
-    if (pmBox) offsetTop += pmBox.offsetHeight + 15;
-
-    for (let i = 0; i < ministereIndex; i++) {
-        if (ministreBoxes[i]) {
-            offsetTop += ministreBoxes[i].offsetHeight + 15;
-        }
-    }
-
-    // --- spacer créé AVANT le contenu ---
-    const spacer = document.createElement('div');
-    spacer.style.height = `${offsetTop}px`;
-    middleCol.appendChild(spacer);
-
-    const titre = document.createElement('div');
-    titre.className = 'column-title';
-    titre.textContent = 'Directions rattachées';
-    middleCol.appendChild(titre);
-
-    const ministre = orgData.ministeres[activeMinistere];
-    ministre.directions.forEach((direction, index) => {
-        const dirBox = createEntityBox(direction, 'direction', true);
-        dirBox.onclick = () => selectDirection(index);
-        middleCol.appendChild(dirBox);
-    });
-}
+   function renderMiddleColumn(ministereIndex) {
+            const middleCol = document.getElementById('middle-column');
+            middleCol.innerHTML = '';
+            
+            if (activeMinistere === null) return;
+            
+            const titre = document.createElement('div');
+            titre.className = 'column-title';
+            titre.textContent = 'Directions rattachées';
+            middleCol.appendChild(titre);
+            
+            const ministre = orgData.ministeres[activeMinistere];
+            ministre.directions.forEach((direction, index) => {
+                const dirBox = createEntityBox(direction, 'direction', true);
+                dirBox.onclick = () => selectDirection(index);
+                middleCol.appendChild(dirBox);
+            });
 
             
             setTimeout(() => {
