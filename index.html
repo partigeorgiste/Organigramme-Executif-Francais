@@ -336,15 +336,15 @@
         
         let orgData = {
             president: {
-                fonction: "Président",
                 nom: "Emmanuel Macron",
+                fonction: "Président de la République",
                 photo: "https://upload.wikimedia.org/wikipedia/commons/4/47/Emmanuel_Macron_-_June_2025_%283x4_cropped%29.jpg",
                 description: "Chef de l'État français, garant de la Constitution et de l'indépendance nationale. Veille au respect de la Constitution, assure le fonctionnement régulier des pouvoirs publics et garantit l'indépendance nationale.",
                 site: "https://www.elysee.fr"
             },
             pm: {
-                fonction: "Premier Ministre",
                 nom: "Sébastien Lecornu",
+                fonction: "Premier Ministre",
                 photo: "https://upload.wikimedia.org/wikipedia/commons/3/3d/Portrait_S%C3%A9bastien_Lecornu.jpg",
                 budget: "Services du PM : 2,57 Md€",
                 description: "Chef du gouvernement français. Coordonne et dirige le travail du gouvernement, conduit la politique nationale et veille à la mise en œuvre des lois.",
@@ -393,8 +393,8 @@
                             const services = servicesRows
                                 .filter(servRow => servRow[0] === directionId)
                                 .map(servRow => ({
-                                    fonction: servRow[1] || '',
-                                    nom: servRow[2] || '',
+                                    nom: servRow[1] || '',
+                                    fonction: servRow[2] || '',
                                     photo: servRow[3] || '👤',
                                     budget: servRow[4] || '',
                                     description: servRow[5] || '',
@@ -402,8 +402,8 @@
                                 }));
                             
                             return {
-                                fonction: dirRow[1] || '',
-                                nom: dirRow[2] || '',
+                                nom: dirRow[1] || '',
+                                fonction: dirRow[2] || '',
                                 photo: dirRow[3] || '👤',
                                 budget: dirRow[4] || '',
                                 description: dirRow[5] || '',
@@ -414,8 +414,8 @@
                         });
                     
                     return {
-                        fonction: row[0] || '',
-                        nom: row[1] || '',
+                        nom: row[0] || '',
+                        fonction: row[1] || '',
                         photo: row[2] || '👤',
                         budget: row[3] || '',
                         description: row[4] || '',
