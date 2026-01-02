@@ -82,12 +82,15 @@
         .entity-box.president {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            cursor: default;
-        }
-        
+            cursor: pointer;
+            transition: all 0.3s ease;
+}
+
         .entity-box.president:hover {
-            transform: none;
-        }
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+            filter: brightness(1.08);
+}
         
         .entity-box.pm {
             background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
@@ -305,7 +308,7 @@
         .empty-state {
             text-align: center;
             color: #a0aec0;
-            padding: 40px 20px;
+            padding: 140px 20px 40px;
             font-size: 14px;
         }
     </style>
