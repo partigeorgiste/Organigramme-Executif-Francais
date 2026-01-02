@@ -176,8 +176,6 @@
             transform: scale(1.2);
         }
         
-
-        
         #modal {
             display: none;
             position: fixed;
@@ -335,8 +333,6 @@
     </div>
 
     <script>
-        // CONFIGURATION - Remplacez par l'ID de votre Google Sheet
-        // L'ID se trouve dans l'URL : https://docs.google.com/spreadsheets/d/VOTRE_ID_ICI/edit
         const SHEET_ID = '16mks04LSsz58SSdedEhRFBRJNtKd--g7CWt3hnvxtbk';
         
         let orgData = {
@@ -361,40 +357,32 @@
         let activeMinistere = null;
         let activeDirection = null;
 
-        // Charger les données depuis Google Sheets (GRATUIT - sans API key)
         async function loadFromGoogleSheets() {
             try {
-                // URLs pour exporter les feuilles en CSV
                 const ministresUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Ministres`;
                 const directionsUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Directions`;
                 const servicesUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Services`;
                 
-                // Charger les ministres
                 const ministresResponse = await fetch(ministresUrl);
                 const ministresText = await ministresResponse.text();
-                const ministresRows = parseCSV(ministresText).slice(1); // Ignorer l'en-tête
+                const ministresRows = parseCSV(ministresText).slice(1);
                 
-                // Charger les directions
                 const directionsResponse = await fetch(directionsUrl);
                 const directionsText = await directionsResponse.text();
                 const directionsRows = parseCSV(directionsText).slice(1);
                 
-                // Charger les services
                 const servicesResponse = await fetch(servicesUrl);
                 const servicesText = await servicesResponse.text();
                 const servicesRows = parseCSV(servicesText).slice(1);
                 
-                // Construire la structure de données
                 orgData.ministeres = ministresRows.map((row, index) => {
                     const ministereId = index;
                     
-                    // Trouver les directions de ce ministère
                     const directions = directionsRows
                         .filter(dirRow => parseInt(dirRow[0]) === ministereId)
                         .map((dirRow, dirIndex) => {
                             const directionId = `${ministereId}-${dirIndex}`;
                             
-                            // Trouver les services de cette direction
                             const services = servicesRows
                                 .filter(servRow => servRow[0] === directionId)
                                 .map(servRow => ({
@@ -433,12 +421,11 @@
                 console.log('Données chargées depuis Google Sheets:', orgData);
                 init();
             } catch (error) {
-    console.error('Erreur lors du chargement des données:', error);
-    alert("Impossible de charger les données depuis Google Sheets.");
+                console.error('Erreur lors du chargement des données:', error);
+                alert("Impossible de charger les données depuis Google Sheets.");
             }
         }
         
-        // Parser CSV simple
         function parseCSV(text) {
             const rows = [];
             let currentRow = [];
@@ -488,15 +475,12 @@
             const leftCol = document.getElementById('left-column');
             leftCol.innerHTML = '';
             
-            // Président
             const presidentBox = createEntityBox(orgData.president, 'president', true);
             leftCol.appendChild(presidentBox);
             
-            // Premier Ministre
             const pmBox = createEntityBox(orgData.pm, 'pm', true);
             leftCol.appendChild(pmBox);
             
-            // Ministères
             orgData.ministeres.forEach((ministre, index) => {
                 const ministreBox = createEntityBox(ministre, 'ministre', true, index);
                 ministreBox.onclick = () => selectMinistere(index);
@@ -545,7 +529,6 @@
             activeMinistere = index;
             activeDirection = null;
             
-            // Mettre à jour l'état actif
             document.querySelectorAll('.entity-box.ministre').forEach((box, i) => {
                 if (i === index) {
                     box.classList.add('active');
@@ -554,15 +537,20 @@
                 }
             });
             
-            renderMiddleColumn();
+            renderMiddleColumn(index);
             clearRightColumn();
         }
 
-        function renderMiddleColumn() {
+        function renderMiddleColumn(ministereIndex) {
             const middleCol = document.getElementById('middle-column');
-            middleCol.innerHTML = '<div class="column-title">Directions rattachées</div>';
+            middleCol.innerHTML = '';
             
             if (activeMinistere === null) return;
+            
+            const titre = document.createElement('div');
+            titre.className = 'column-title';
+            titre.textContent = 'Directions rattachées';
+            middleCol.appendChild(titre);
             
             const ministre = orgData.ministeres[activeMinistere];
             ministre.directions.forEach((direction, index) => {
@@ -570,12 +558,32 @@
                 dirBox.onclick = () => selectDirection(index);
                 middleCol.appendChild(dirBox);
             });
+            
+            setTimeout(() => {
+                const ministreBoxes = document.querySelectorAll('.entity-box.ministre');
+                let offsetTop = 0;
+                
+                const presidentBox = document.querySelector('.entity-box.president');
+                const pmBox = document.querySelector('.entity-box.pm');
+                if (presidentBox) offsetTop += presidentBox.offsetHeight + 15;
+                if (pmBox) offsetTop += pmBox.offsetHeight + 15;
+                
+                for (let i = 0; i < ministereIndex; i++) {
+                    if (ministreBoxes[i]) {
+                        offsetTop += ministreBoxes[i].offsetHeight + 15;
+                    }
+                }
+                
+                const spacer = document.createElement('div');
+                spacer.style.height = `${offsetTop}px`;
+                spacer.id = 'middle-spacer';
+                middleCol.insertBefore(spacer, middleCol.firstChild);
+            }, 0);
         }
 
         function selectDirection(index) {
             activeDirection = index;
             
-            // Mettre à jour l'état actif
             document.querySelectorAll('.entity-box.direction').forEach((box, i) => {
                 if (i === index) {
                     box.classList.add('active');
@@ -584,25 +592,57 @@
                 }
             });
             
-            renderRightColumn();
+            renderRightColumn(index);
         }
 
-        function renderRightColumn() {
+        function renderRightColumn(directionIndex) {
             const rightCol = document.getElementById('right-column');
-            rightCol.innerHTML = '<div class="column-title">Services rattachés</div>';
+            rightCol.innerHTML = '';
             
             if (activeMinistere === null || activeDirection === null) return;
             
+            const titre = document.createElement('div');
+            titre.className = 'column-title';
+            titre.textContent = 'Services rattachés';
+            rightCol.appendChild(titre);
+            
             const direction = orgData.ministeres[activeMinistere].directions[activeDirection];
             if (direction.services.length === 0) {
-                rightCol.innerHTML += '<div class="empty-state">Aucun service à afficher</div>';
-                return;
+                const emptyState = document.createElement('div');
+                emptyState.className = 'empty-state';
+                emptyState.textContent = 'Aucun service à afficher';
+                rightCol.appendChild(emptyState);
+            } else {
+                direction.services.forEach(service => {
+                    const serviceBox = createEntityBox(service, 'service', true);
+                    rightCol.appendChild(serviceBox);
+                });
             }
             
-            direction.services.forEach(service => {
-                const serviceBox = createEntityBox(service, 'service', true);
-                rightCol.appendChild(serviceBox);
-            });
+            setTimeout(() => {
+                let offsetTop = 0;
+                
+                const middleSpacer = document.getElementById('middle-spacer');
+                if (middleSpacer) {
+                    offsetTop = parseInt(middleSpacer.style.height) || 0;
+                }
+                
+                const middleTitle = document.querySelector('#middle-column .column-title');
+                if (middleTitle) {
+                    offsetTop += middleTitle.offsetHeight + 15;
+                }
+                
+                const directionBoxes = document.querySelectorAll('.entity-box.direction');
+                for (let i = 0; i < directionIndex; i++) {
+                    if (directionBoxes[i]) {
+                        offsetTop += directionBoxes[i].offsetHeight + 15;
+                    }
+                }
+                
+                const rightSpacer = document.createElement('div');
+                rightSpacer.style.height = `${offsetTop}px`;
+                rightCol.insertBefore(rightSpacer, rightCol.firstChild);
+            }, 0);
         }
 
         function clearRightColumn() {
@@ -657,8 +697,6 @@
             if (e.target.id === 'modal') closeModal();
         };
 
-        // Démarrer l'application
-        // Décommenter la ligne suivante pour charger depuis Google Sheets
         loadFromGoogleSheets();
     </script>
 </body>
