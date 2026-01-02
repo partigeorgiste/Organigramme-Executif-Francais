@@ -562,19 +562,26 @@
             clearRightColumn();
         }
 
-        function renderMiddleColumn() {
-            const middleCol = document.getElementById('middle-column');
-            middleCol.innerHTML = '<div class="column-title">Directions rattachées</div>';
-            
-            if (activeMinistere === null) return;
-            
-            const ministre = orgData.ministeres[activeMinistere];
-            ministre.directions.forEach((direction, index) => {
-                const dirBox = createEntityBox(direction, 'direction', true);
-                dirBox.onclick = () => selectDirection(index);
-                middleCol.appendChild(dirBox);
-            });
-        }
+    function renderMiddleColumn() {
+        const middleCol = document.getElementById('middle-column');
+        middleCol.innerHTML = '';
+    
+        if (activeMinistere === null) return;
+    
+        const ministre = orgData.ministeres[activeMinistere];
+    
+        // Titre dynamique avec nom du ministère parent
+        const titre = document.createElement('div');
+        titre.className = 'column-title';
+        titre.textContent = `Directions rattachées - ${ministre.nom}`;
+        middleCol.appendChild(titre);
+    
+        ministre.directions.forEach((direction, index) => {
+        const dirBox = createEntityBox(direction, 'direction', true);
+        dirBox.onclick = () => selectDirection(index);
+        middleCol.appendChild(dirBox);
+    });
+}
 
         function selectDirection(index) {
             activeDirection = index;
@@ -592,22 +599,29 @@
         }
 
         function renderRightColumn() {
-            const rightCol = document.getElementById('right-column');
-            rightCol.innerHTML = '<div class="column-title">Services rattachés</div>';
-            
-            if (activeMinistere === null || activeDirection === null) return;
-            
-            const direction = orgData.ministeres[activeMinistere].directions[activeDirection];
-            if (direction.services.length === 0) {
-                rightCol.innerHTML += '<div class="empty-state">Aucun service à afficher</div>';
-                return;
-            }
-            
-            direction.services.forEach(service => {
-                const serviceBox = createEntityBox(service, 'service', true);
-                rightCol.appendChild(serviceBox);
-            });
-        }
+    const rightCol = document.getElementById('right-column');
+    rightCol.innerHTML = '';
+
+    if (activeMinistere === null || activeDirection === null) return;
+
+    const direction = orgData.ministeres[activeMinistere].directions[activeDirection];
+
+    // Titre dynamique avec nom de la direction parente
+    const titre = document.createElement('div');
+    titre.className = 'column-title';
+    titre.textContent = `Services rattachés - ${direction.nom}`;
+    rightCol.appendChild(titre);
+
+    if (direction.services.length === 0) {
+        rightCol.innerHTML += '<div class="empty-state">Aucun service à afficher</div>';
+        return;
+    }
+
+    direction.services.forEach(service => {
+        const serviceBox = createEntityBox(service, 'service', true);
+        rightCol.appendChild(serviceBox);
+    });
+}
 
         function clearRightColumn() {
             const rightCol = document.getElementById('right-column');
