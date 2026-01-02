@@ -360,9 +360,9 @@
         async function loadFromGoogleSheets() {
             try {
                 // URLs pour exporter les feuilles en CSV
-                const ministresUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Page1`;
-                const directionsUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Page2`;
-                const servicesUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Page3`;
+                const ministresUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Ministres`;
+                const directionsUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Directions`;
+                const servicesUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Services`;
                 
                 // Charger les ministres
                 const ministresResponse = await fetch(ministresUrl);
