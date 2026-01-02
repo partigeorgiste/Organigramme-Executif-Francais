@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -78,8 +77,15 @@
         .entity-box.president {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            cursor: default;
+            cursor: pointer; /* <-- mettre pointer pour montrer que c'est cliquable */
         }
+
+        .entity-box.president:hover {
+            transform: translateX(5px); /* <-- restaurer l'effet hover */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+            filter: brightness(1.08);
+        }
+
         
         .entity-box.president:hover {
             transform: none;
@@ -480,25 +486,27 @@
             renderLeftColumn();
         }
 
-        function renderLeftColumn() {
-            const leftCol = document.getElementById('left-column');
-            leftCol.innerHTML = '';
-            
-            // Président
-            const presidentBox = createEntityBox(orgData.president, 'president', true);
-            leftCol.appendChild(presidentBox);
-            
-            // Premier Ministre
-            const pmBox = createEntityBox(orgData.pm, 'pm', true);
-            leftCol.appendChild(pmBox);
-            
-            // Ministères
-            orgData.ministeres.forEach((ministre, index) => {
-                const ministreBox = createEntityBox(ministre, 'ministre', true, index);
-                ministreBox.onclick = () => selectMinistere(index);
-                leftCol.appendChild(ministreBox);
-            });
-        }
+      function renderLeftColumn() {
+    const leftCol = document.getElementById('left-column');
+    leftCol.innerHTML = '';
+    
+    // Président
+    const presidentBox = createEntityBox(orgData.president, 'president', true);
+    presidentBox.onclick = () => resetOrganisation(); // <-- Ajout du clic
+    leftCol.appendChild(presidentBox);
+    
+    // Premier Ministre
+    const pmBox = createEntityBox(orgData.pm, 'pm', true);
+    pmBox.onclick = () => resetOrganisation(); // <-- Ajout du clic
+    leftCol.appendChild(pmBox);
+    
+    // Ministères
+    orgData.ministeres.forEach((ministre, index) => {
+        const ministreBox = createEntityBox(ministre, 'ministre', true, index);
+        ministreBox.onclick = () => selectMinistere(index);
+        leftCol.appendChild(ministreBox);
+    });
+}
 
         function createEntityBox(entity, type, hasInfo, index = null) {
             const box = document.createElement('div');
