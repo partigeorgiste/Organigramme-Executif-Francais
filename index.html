@@ -573,7 +573,7 @@
         // Titre dynamique avec nom du ministère parent
         const titre = document.createElement('div');
         titre.className = 'column-title';
-        titre.textContent = `Directions rattachées - ${ministre.nom}`;
+        titre.textContent = `Directions rattachées - ${ministre.function}`;
         middleCol.appendChild(titre);
     
         ministre.directions.forEach((direction, index) => {
