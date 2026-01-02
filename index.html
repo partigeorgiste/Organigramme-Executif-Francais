@@ -476,10 +476,12 @@
             leftCol.innerHTML = '';
             
             const presidentBox = createEntityBox(orgData.president, 'president', true);
-            leftCol.appendChild(presidentBox);
+presidentBox.onclick = () => resetOrganisation();
+leftCol.appendChild(presidentBox);
             
             const pmBox = createEntityBox(orgData.pm, 'pm', true);
-            leftCol.appendChild(pmBox);
+pmBox.onclick = () => resetOrganisation();
+leftCol.appendChild(pmBox);
             
             orgData.ministeres.forEach((ministre, index) => {
                 const ministreBox = createEntityBox(ministre, 'ministre', true, index);
@@ -539,6 +541,24 @@
             
             renderMiddleColumn(index);
             clearRightColumn();
+
+            function resetOrganisation() {
+    activeMinistere = null;
+    activeDirection = null;
+
+    // Désactiver tous les ministères
+    document.querySelectorAll('.entity-box.ministre').forEach(box => {
+        box.classList.remove('active');
+    });
+
+    // Vider la colonne du milieu
+    const middleCol = document.getElementById('middle-column');
+    middleCol.innerHTML = '<div class="empty-state">← Cliquez sur un ministère pour voir ses directions</div>';
+
+    // Vider la colonne de droite
+    clearRightColumn();
+}
+
         }
 
         function renderMiddleColumn(ministereIndex) {
